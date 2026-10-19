@@ -8,6 +8,8 @@
 
 ![CabDesk product tour — dashboard, fleet and reports](docs/assets/gifs/product-tour.gif)
 
+**▶ See it live:** the [interactive product guide](https://m0-ar.github.io/cab-booking-saas/) — screens, a quiz, and fare/ROI calculators — is published on GitHub Pages. Short aliases: [preview.html](https://m0-ar.github.io/cab-booking-saas/preview.html) · [docs/preview.html](https://m0-ar.github.io/cab-booking-saas/docs/preview.html).
+
 ---
 
 ## The 30‑second summary
@@ -275,6 +277,24 @@ Any small Linux VM works (1 GB of RAM is plenty for a starter fleet).
 ```bash
 docker compose exec db pg_dump -U postgres cab_booking > backup.sql
 ```
+
+## Publish the interactive guide (GitHub Pages)
+
+`docs/` is a self-contained interactive guide — screenshots, a 10-question quiz, and fare/ROI calculators — with no build step. To publish it from your fork:
+
+1. Repo → **Settings → Pages**.
+2. Source: **Deploy from a branch**, branch **`main`**, folder **`/`** (recommended) or **`/docs`**.
+3. The guide is live in about a minute.
+
+Every entry point resolves:
+
+| Entry point | What it serves |
+|---|---|
+| [cab-booking-saas/](https://m0-ar.github.io/cab-booking-saas/) | The guide |
+| [preview.html](https://m0-ar.github.io/cab-booking-saas/preview.html) | Short alias |
+| [docs/preview.html](https://m0-ar.github.io/cab-booking-saas/docs/preview.html) | Alias under the repo tree |
+
+The first two links work with either source setting; all three work when the source is the repo root. The small redirect pages (`index.html`, `preview.html`, `docs/preview.html`) plus `.nojekyll` at both levels exist so clicking any of them never lands on a 404, whichever folder Pages is serving.
 
 ## Environment variables
 
