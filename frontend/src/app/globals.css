@@ -1,0 +1,250 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---------------------------------------------------------------------------
+   Tokens — "Calm operations" palette (see docs/DESIGN.md)
+   Near-neutral OKLCH surfaces, one accent (--brand), hairline borders.
+   Brand variables are overridden at runtime by lib/branding.ts (applyBrand).
+--------------------------------------------------------------------------- */
+
+:root {
+  color-scheme: light;
+
+  --bg: oklch(0.977 0.004 250);
+  --surface: oklch(1 0 0);
+  --surface-2: oklch(0.958 0.005 250);
+  --border: oklch(0.916 0.007 250);
+  --border-strong: oklch(0.868 0.009 250);
+  --fg: oklch(0.235 0.021 257);
+  --muted: oklch(0.505 0.017 257);
+
+  --brand: #0f766e;
+  --brand-fg: #ffffff;
+  --brand-ink: var(--brand);
+  --brand-hover: color-mix(in oklab, var(--brand) 90%, black);
+
+  --accent: #f59e0b;
+
+  --success: oklch(0.55 0.15 152);
+  --success-ink: oklch(0.5 0.13 152);
+  --danger: oklch(0.55 0.19 25);
+  --danger-ink: oklch(0.51 0.18 25);
+  --danger-fg: #ffffff;
+  --warning: oklch(0.66 0.14 80);
+  --warning-ink: oklch(0.5 0.11 75);
+  --info: oklch(0.55 0.13 250);
+  --info-ink: oklch(0.5 0.14 250);
+
+  --shadow-xs: 0 1px 2px rgb(10 20 30 / 0.05);
+  --shadow-card: 0 1px 2px rgb(10 20 30 / 0.04), 0 2px 8px rgb(10 20 30 / 0.05);
+  --shadow-overlay: 0 4px 12px rgb(10 20 30 / 0.1),
+    0 16px 40px -8px rgb(10 20 30 / 0.18);
+}
+
+.dark {
+  color-scheme: dark;
+
+  /* Dark depth is expressed through lightness steps (bg → surface → surface-2),
+     not shadows (research: 2026 audit of Linear/Vercel-style systems). */
+  --bg: oklch(0.155 0.012 257);
+  --surface: oklch(0.205 0.014 257);
+  --surface-2: oklch(0.262 0.016 257);
+  --border: oklch(0.3 0.016 257);
+  --border-strong: oklch(0.37 0.018 257);
+  --fg: oklch(0.952 0.004 250);
+  --muted: oklch(0.702 0.014 252);
+
+  --brand-ink: color-mix(in oklab, var(--brand) 65%, white);
+  --brand-hover: color-mix(in oklab, var(--brand) 85%, white);
+
+  --success: oklch(0.72 0.15 152);
+  --success-ink: oklch(0.78 0.14 152);
+  --danger: oklch(0.7 0.17 25);
+  --danger-ink: oklch(0.78 0.14 25);
+  --danger-fg: oklch(0.18 0.02 257);
+  --warning: oklch(0.78 0.13 80);
+  --warning-ink: oklch(0.8 0.12 80);
+  --info: oklch(0.72 0.12 250);
+  --info-ink: oklch(0.78 0.11 250);
+
+  --shadow-xs: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.35), 0 2px 8px rgb(0 0 0 / 0.3);
+  --shadow-overlay: 0 4px 12px rgb(0 0 0 / 0.4), 0 16px 40px -8px rgb(0 0 0 / 0.5);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-brand: var(--brand);
+  --color-brand-fg: var(--brand-fg);
+  --color-brand-ink: var(--brand-ink);
+  --color-accent: var(--accent);
+  --color-success: var(--success);
+  --color-success-ink: var(--success-ink);
+  --color-danger: var(--danger);
+  --color-danger-ink: var(--danger-ink);
+  --color-danger-fg: var(--danger-fg);
+  --color-warning: var(--warning);
+  --color-warning-ink: var(--warning-ink);
+  --color-info: var(--info);
+  --color-info-ink: var(--info-ink);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.625rem;
+  --radius-xl: 0.875rem;
+  --radius-2xl: 1.125rem;
+}
+
+/* ---------------------------------- Base ---------------------------------- */
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+.dark :focus-visible {
+  /* Teal-on-dark sits below 3:1; the lightened brand ink keeps the ring visible
+     (WCAG 2.4.13 focus appearance). */
+  outline-color: var(--brand-ink);
+}
+
+/* Raised surfaces get a hairline top highlight in dark mode so cards read as
+   layered against the page. Light mode stays flat per the design contract. */
+.dark .elev-card {
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.04);
+}
+
+::selection {
+  background: color-mix(in srgb, var(--brand) 25%, transparent);
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border: 3px solid var(--bg);
+  border-radius: 999px;
+}
+
+input,
+select,
+textarea,
+button {
+  font: inherit;
+}
+
+/* -------------------------------- Keyframes -------------------------------- */
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.98) translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-scale-in {
+  animation: scale-in 0.16s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* -------------------------------- Skeleton --------------------------------- */
+
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: var(--surface-2);
+}
+
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--fg) 6%, transparent),
+    transparent
+  );
+  animation: shimmer 1.6s infinite;
+}
+
+.prose-measure {
+  max-width: 68ch;
+}
+
+/* ----------------------------- Reduced motion ------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .skeleton::after {
+    display: none;
+  }
+}
